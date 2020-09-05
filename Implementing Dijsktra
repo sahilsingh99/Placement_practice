@@ -1,0 +1,84 @@
+// { Driver Code Starts
+#include<bits/stdc++.h>
+using namespace std;
+
+vector <int> dijkstra(vector<vector<int>> , int ,int );
+
+int printSolution(vector <int> dist, int n)
+{
+  
+   for (int i = 0; i < n; i++)
+      printf("%d ", dist[i]);
+  
+}
+int main()
+{
+    int t;
+    int V;
+    cin>>t;
+    while(t--){
+        cin>>V;
+        
+        vector<vector<int>> g(V);
+        
+        for(int i = 0;i<V;i++){
+            vector<int> temp(V);
+            g[i] = temp;
+        }
+        
+        for(int i=0;i<V;i++)
+        {
+      	    for(int j=0;j<V;j++)
+      	    {
+      		    cin>>g[i][j];
+      	    }
+        }
+        
+        int s;
+        cin>>s;
+        
+        vector <int> res = dijkstra(g, s, V);
+        printSolution (res, V);
+        cout<<endl;
+       }
+        return 0;
+}// } Driver Code Ends
+
+
+/*  Function to implement Dijkstra
+*   g: vector of vectors which represents the graph
+*   src: source vertex to start traversing graph with
+*   V: number of vertices
+*/
+
+int mindist(vector <int> dist, int taken[], int n)
+{
+    int mind , md = 100000;
+    for(int i = 0; i < n; i++)
+        if(dist[i] < md and !taken[i])
+        {
+            mind = i;
+            md = dist[i];
+        }
+    return mind;
+}
+
+vector <int> dijkstra(vector<vector<int>> gp, int src, int V)
+{
+    int n = V;
+    int inf = 100000;
+    // Your code here
+    vector<int> dist(n,0);
+    for(int i=0;i<n;i++)dist[i] = inf;
+    int taken[n]={0};
+    dist[src] = 0;
+    for(int i = 0 ; i < n-1 ; i++)
+    {
+        int ind = mindist(dist, taken, n);
+        taken[ind] = 1;
+        for(int j = 0; j < n ; j++)
+            if(gp[ind][j] and !taken[j] and dist[ind] != inf and dist[ind] + gp[ind][j] < dist[j])
+                dist[j] = dist[ind] + gp[ind][j];
+    }
+    return dist;
+}
