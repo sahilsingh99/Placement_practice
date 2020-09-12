@@ -1,0 +1,64 @@
+// This code is copied but logic is mine.
+
+#include<bits/stdc++.h>
+using namespace std;
+#define fast ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
+#define int long long
+signed main()
+ {
+	fast
+	int t,n;
+	cin>>t;
+	while(t--)
+	{
+	    cin>>n;
+	    vector<vector<int>> a(n,vector<int>(n));
+	    for(int i=0;i<n;i++)
+	    for(int j=0;j<n;j++)
+	    cin>>a[i][j];
+	    
+	    vector<vector<int>> dist(n,vector<int>(n,INT_MAX));
+	    dist[0][0]=a[0][0];
+	    
+	    vector<vector<bool>> vis(n,vector<bool>(n,false));
+	    
+	    priority_queue<pair<int,pair<int,int>>,vector<pair<int,pair<int,int>>>,greater<pair<int,pair<int,int>>>> pq;
+	    pq.push({0,{0,0}});
+	    
+	    while(pq.size())
+	    {
+	        pair<int,int> u=pq.top().second; pq.pop();
+	        if(!vis[u.first][u.second])
+	        {
+	            vis[u.first][u.second]=true;
+	            
+	            if(u.first-1>=0 && !vis[u.first-1][u.second] && dist[u.first-1][u.second]>dist[u.first][u.second] + a[u.first-1][u.second])
+	            {
+	                dist[u.first-1][u.second]=dist[u.first][u.second] + a[u.first-1][u.second];
+	                
+	                pq.push({dist[u.first-1][u.second],{u.first-1,u.second}});
+	            }
+	            if(u.first+1<n && !vis[u.first+1][u.second] && dist[u.first+1][u.second]>dist[u.first][u.second] + a[u.first+1][u.second])
+	            {
+	                dist[u.first+1][u.second]=dist[u.first][u.second] + a[u.first+1][u.second];
+	                
+	                pq.push({dist[u.first+1][u.second],{u.first+1,u.second}});
+	            }
+	            if(u.second-1>=0 && !vis[u.first][u.second-1] && dist[u.first][u.second-1]>dist[u.first][u.second] + a[u.first][u.second-1])
+	            {
+	                dist[u.first][u.second-1]=dist[u.first][u.second] + a[u.first][u.second-1];
+	                
+	                pq.push({dist[u.first][u.second-1],{u.first,u.second-1}});
+	            }
+	            if(u.second+1<n && !vis[u.first][u.second+1] && dist[u.first][u.second+1]>dist[u.first][u.second] + a[u.first][u.second+1])
+	            {
+	                dist[u.first][u.second+1]=dist[u.first][u.second] + a[u.first][u.second+1];
+	                
+	                pq.push({dist[u.first][u.second+1],{u.first,u.second+1}});
+	            }
+	        }
+	    }
+	    cout<<dist[n-1][n-1]<<endl;
+	}
+	return 0;
+}
